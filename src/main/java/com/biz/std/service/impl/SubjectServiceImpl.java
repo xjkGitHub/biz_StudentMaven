@@ -6,11 +6,13 @@ import com.biz.std.model.Subject;
 import com.biz.std.repository.ScoreRepository;
 import com.biz.std.repository.StudentRepository;
 import com.biz.std.repository.SubjectRepository;
+import com.biz.std.service.AvgScoreAndNumService;
 import com.biz.std.service.StudentService;
 import com.biz.std.service.SubjectService;
 import com.biz.std.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,51 +27,36 @@ public class SubjectServiceImpl implements SubjectService {
     @Autowired
     private SubjectRepository subjectRepository;
     @Autowired
-    private ScoreRepository scoreRepository;
-    @Autowired
-    private StudentRepository studentRepository;
+    private AvgScoreAndNumService avgScoreAndNumService;
+
+    @Transactional
     public void addSubject(SubjectVo subjectVo) {
 
         Subject subject = new Subject();
         subject.setSubjectId(subjectVo.getSubjectId());
         subject.setName(subjectVo.getSubjectName());
-        subject.setSubjectNum(0);
-        subject.setSubAvgScore(0);
         subjectRepository.save(subject);
     }
-
+    @Transactional
     public void modifySubject(SubjectVo subjectVo) {
         Subject subject = subjectRepository.findOne(subjectVo.getSubjectId());
         if(subjectVo!=null){
             subject.setSubjectId(subjectVo.getSubjectId());
             subject.setName(subjectVo.getSubjectName());
-            subject.setSubjectNum(subjectVo.getSubjectNum());
-            subject.setSubAvgScore(subjectVo.getSubjectAvgScore());
             subjectRepository.save(subject);
         }
     }
 
     public SubjectVo searchSubject(int id) {
-
         SubjectVo subjectVo = new SubjectVo();
         subjectVo.setSubjectId(subjectRepository.findOne(id).getSubjectId());
         subjectVo.setSubjectName(subjectRepository.findOne(id).getName());
-        List<Score>scoreList = scoreRepository.findBySubject_SubjectId(subjectVo.getSubjectId());
-        Score score = new Score();
-        int allSubjectScore = 0;
-
-
-            Iterator it = scoreList.iterator();
-            while (it.hasNext()) {
-                score = (Score) it.next();
-                allSubjectScore += score.getScore();
-            }
-            subjectVo.setSubjectNum(scoreList.size());
-            subjectVo.setSubjectAvgScore(allSubjectScore / scoreList.size());
+        subjectVo.setSubjectNum(avgScoreAndNumService.subjectAvgScore(id).getNum());
+        subjectVo.setSubjectAvgScore(avgScoreAndNumService.subjectAvgScore(id).getAvgScore());
         return  subjectVo;
     }
 
-
+    @Transactional
     public void deleteSubject(int id) {
 
         subjectRepository.delete(id);
@@ -86,22 +73,9 @@ public class SubjectServiceImpl implements SubjectService {
             SubjectVo subjectVo = new SubjectVo();
             subjectVo.setSubjectId(subject.getSubjectId());
             subjectVo.setSubjectName(subject.getName());
-            List<Score>scoreList = scoreRepository.findBySubject_SubjectId(subjectVo.getSubjectId());
-            Score score = new Score();
-            int allSubjectScore = 0;
-                Iterator itScores = scoreList.iterator();
-                while (itScores.hasNext()) {
-                    score = (Score) itScores.next();
-                    allSubjectScore += score.getScore();
-                }
-                subjectVo.setSubjectNum(scoreList.size());
-                try {
-                    subjectVo.setSubjectAvgScore(allSubjectScore / scoreList.size());
-                }catch (Exception e){
-
-                }
+            subjectVo.setSubjectNum(avgScoreAndNumService.subjectAvgScore(subject.getSubjectId()).getNum());
+            subjectVo.setSubjectAvgScore(avgScoreAndNumService.subjectAvgScore(subject.getSubjectId()).getAvgScore());
                 subjectVoList.add(subjectVo);
-
         }
         return subjectVoList;
     }

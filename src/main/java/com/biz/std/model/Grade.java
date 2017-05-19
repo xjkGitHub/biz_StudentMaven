@@ -18,10 +18,6 @@ public class Grade {
     private String gradeName;
     @OneToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY,mappedBy = "grade")
     private List<Student> students;
-    @Column(length = 11)
-    private float GradeAvgScore;
-    @Column(length = 10)
-    private Integer gradeNum;
 
     public Grade() {
     }
@@ -29,8 +25,6 @@ public class Grade {
     public Grade(String gradeName, List<Student> students, float gradeAvgScore,Integer gradeNum) {
         this.gradeName = gradeName;
         this.students = students;
-        GradeAvgScore = gradeAvgScore;
-        this.gradeNum = gradeNum;
     }
 
     public Integer getGradeId() {
@@ -57,19 +51,4 @@ public class Grade {
         this.students = students;
     }
 
-    public float getGradeAvgScore() {
-        return GradeAvgScore;
-    }
-
-    public void setGradeAvgScore(float gradeAvgScore) {
-        GradeAvgScore = gradeAvgScore;
-    }
-
-    public Integer getGradeNum() {
-        return gradeNum;
-    }
-
-    public void setGradeNum(Integer gradeNum) {
-        this.gradeNum = gradeNum;
-    }
 }

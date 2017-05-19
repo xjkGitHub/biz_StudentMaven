@@ -14,13 +14,8 @@ public class Subject {
     private Integer subjectId;
     @Column(length = 40)
     private String name;
-
     @OneToMany(mappedBy="score",cascade=CascadeType.ALL)
     private List<Score> scores;
-    @Column(length = 11)
-    private float subAvgScore;
-    @Column(length = 10)
-    private Integer subjectNum;
 
     public Subject() {
     }
@@ -28,8 +23,7 @@ public class Subject {
     public Subject(String name, List<Score> scores, float subAvgScore,Integer subjectNum) {
         this.name = name;
         this.scores = scores;
-        this.subAvgScore = subAvgScore;
-        this.subjectNum = subjectNum;
+
     }
 
     public Integer getSubjectId() {
@@ -56,19 +50,4 @@ public class Subject {
         this.scores = scores;
     }
 
-    public float getSubAvgScore() {
-        return subAvgScore;
-    }
-
-    public void setSubAvgScore(float subAvgScore) {
-        this.subAvgScore = subAvgScore;
-    }
-
-    public Integer getSubjectNum() {
-        return subjectNum;
-    }
-
-    public void setSubjectNum(Integer subjectNum) {
-        this.subjectNum = subjectNum;
-    }
 }

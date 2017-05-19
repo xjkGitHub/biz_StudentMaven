@@ -22,8 +22,7 @@ import java.util.List;
 public class GradeController {
     @Autowired
     private GradeService gradeService;
-//    @Autowired
-//    private StudentService studentService;
+
     @RequestMapping("/addGrade")
     public ModelAndView addGrade(ModelAndView modelAndView,GradeVo gradeVo)throws Exception {
 

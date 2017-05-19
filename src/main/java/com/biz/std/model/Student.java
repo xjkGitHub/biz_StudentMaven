@@ -31,10 +31,6 @@ public class Student {
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.REFRESH}, optional = false)
     @JoinColumn(name = "grade_id")
     private Grade grade;
-    @Column(length = 11)
-    private float avgScore;
-    @Column(length = 10)
-    private Integer subjectCounts;
     @Column(length =254)
     private String headerIm;
 
@@ -48,8 +44,6 @@ public class Student {
         this.birthday = birthday;
         this.scores = scores;
         this.grade = grade;
-        this.avgScore = avgScore;
-        this.subjectCounts = subjectCounts;
         this.headerIm = headerIm;
     }
 
@@ -107,22 +101,6 @@ public class Student {
 
     public void setGrade(Grade grade) {
         this.grade = grade;
-    }
-
-    public float getAvgScore() {
-        return avgScore;
-    }
-
-    public void setAvgScore(float avgScore) {
-        this.avgScore = avgScore;
-    }
-
-    public Integer getSubjectCounts() {
-        return subjectCounts;
-    }
-
-    public void setSubjectCounts(Integer subjectCounts) {
-        this.subjectCounts = subjectCounts;
     }
 
     public String getHeaderIm() {
