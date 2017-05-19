@@ -28,6 +28,8 @@ public class SubjectServiceImpl implements SubjectService {
     private SubjectRepository subjectRepository;
     @Autowired
     private AvgScoreAndNumService avgScoreAndNumService;
+    @Autowired
+    private  ScoreRepository scoreRepository;
 
     @Transactional
     public void addSubject(SubjectVo subjectVo) {
@@ -58,8 +60,11 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Transactional
     public void deleteSubject(int id) {
-
-        subjectRepository.delete(id);
+        List<Score> scoreList = scoreRepository.findBySubject_SubjectId(id);
+        //有学生的科目不允许删除
+        if(scoreList.size()==0) {
+            subjectRepository.delete(id);
+        }
     }
 
 

@@ -27,6 +27,8 @@ public class GradeServiceImpl implements GradeService {
     private GradeRepository gradeRepository;
     @Autowired
     private AvgScoreAndNumService avgScoreAndNumService;
+    @Autowired
+    private  StudentRepository studentRepository;
 
     @Transactional
     public void addGrade(GradeVo gradeVo) {
@@ -49,7 +51,10 @@ public class GradeServiceImpl implements GradeService {
 
     @Transactional
     public void deleteGrade(int id) {
-        gradeRepository.delete(id);
+        List<Student> studentList = studentRepository.findByGrade_GradeId(id);
+        if(studentList.size()==0) {
+            gradeRepository.delete(id);
+        }
     }
 
     public GradeVo getGrade(int id) {
